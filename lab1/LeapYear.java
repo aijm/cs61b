@@ -1,5 +1,7 @@
+// import com.sun.org.apache.xpath.internal.operations.And;
+
 /** Class that determines whether or not a year is a leap year.
- *  @author YOUR NAME HERE
+ *  @author aijm <aichangeworld@gmail.com>
  */
 public class LeapYear {
 
@@ -12,6 +14,16 @@ public class LeapYear {
         } else {
             System.out.printf("%d is not a leap year.\n", year);
         }
+    }
+
+    /**whether or not a given year is a Leap Year
+     * @param year to be analyzed
+     */
+    public static boolean isLeapYear(int year){
+        if((year%4==0 && year%100!=0)||(year %400)==0){
+            return true;
+        }
+        return false;
     }
 
     /** Must be provided an integer as a command line argument ARGS. */
