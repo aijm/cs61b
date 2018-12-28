@@ -1,0 +1,34 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - StdAudioDemo",
+            "request": "launch",
+            "mainClass": "StdAudioDemo"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - NBody",
+            "request": "launch",
+            "mainClass": "NBody"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - TestReadRadius",
+            "request": "launch",
+            "mainClass": "TestReadRadius"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - TestReadPlanets",
+            "request": "launch",
+            "mainClass": "TestReadPlanets"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - IntList",
+            "request": "launch",
+            "mainClass": "IntList"
+        }
+    ]
+}
