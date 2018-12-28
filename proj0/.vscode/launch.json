@@ -1,0 +1,11 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - NBody",
+            "request": "launch",
+            "mainClass": "NBody",
+            "args": "157788000.0 25000.0 data/planets.txt"
+        }
+    ]
+}
