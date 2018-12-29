@@ -81,8 +81,16 @@ public class IntList {
      */
 
     public static IntList dcatenate(IntList A, IntList B) {
-        //TODO:  fill in method
-        return null;
+        // find the last one of A
+        if(A == null){
+            return B;
+        }
+        IntList p = A;
+        while(p.rest!=null){
+            p = p.rest;
+        }
+        p.rest = B;
+        return A;
     }
 
     /**
@@ -90,8 +98,19 @@ public class IntList {
      * * elements of B.  May NOT modify items of A.  Use 'new'.
      */
     public static IntList catenate(IntList A, IntList B) {
-        //TODO:  fill in method
-        return null;
+        if(A == null){
+            return B;
+        }
+        IntList cate = new IntList(A.first,A.rest);
+        IntList p_cate = cate;
+        IntList p_A = A;
+        while(p_A.rest!=null){
+            p_cate.rest = new IntList(p_A.rest.first,p_A.rest.rest);
+            p_cate = p_cate.rest;
+            p_A = p_A.rest;
+        }
+        p_cate.rest = B;
+        return cate;
     }
 
 
