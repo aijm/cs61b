@@ -1,95 +1,87 @@
-/** Array based list.
- *  @author Josh Hug
- */
+public class AList<T> implements List61B<T>{
+     
+    private int size;
+    private T[] items;
 
-/* The next item ALWAYS goes in the size position */
 
-public class AList<Item> implements List61B<Item>{
-	/* the stored integers */
-	private Item[] items;
-	private int size;
-
-	private static int RFACTOR = 2;
-
-    /** Creates an empty list. */
-    public AList() {
-    	size = 0;
-    	items = (Item[]) new Object[100];
+    public AList(){
+        size = 0;
+        items = (T[]) new Object[100];
     }
-
-    /** Resize our backing array so that it is
-      * of the given capacity. */
-    private void resize(int capacity) {
-    	Item[] a = (Item[]) new Object[capacity];
-    	System.arraycopy(items, 0, a, 0, size);
-    	items = a;    	
+    /** Resize the list according to the capacity */
+    public void resize(int capacity){
+        T[] a = (T[]) new Object[capacity];
+        System.arraycopy(items,0,a,0,size);
+        items = a;
     }
-
+    /** add the item from the back of the list */
     @Override
-    /** Inserts X into the back of the list. */
-    public void addLast(Item x) {
-    	if (size == items.length) {
-    		resize(size * RFACTOR);
-    	}
+    public void addLast(T x){
+        if(size == items.length){
+            resize(2*size);
+        }
+        items[size] = x;
+        size++;
 
-    	items[size] = x;
-    	size = size + 1;
+    }
+    /** add the item from the front of the list */
+    @Override
+    public void addFirst(T x){
+        insert(x,0);
+
     }
 
+    /** Return the first item from the front of the list */
     @Override
-    /** Returns the item from the back of the list. */
-    public Item getLast() {
-    	int lastActualItemIndex = size - 1;
-    	return items[lastActualItemIndex];
+    public T getFirst(){
+        return items[0];
     }
 
+    /** Return the last item from the back of the list */
     @Override
-    /** Gets the ith item in the list (0 is the front). */
-    public Item get(int i) {
+    public T getLast(){
+        return items[size-1];
+    }
+
+    
+    /** Return the size of the list */
+    @Override
+    public int size(){
+        
+        return size;
+    }
+
+    /** Return the ith item of the list */
+    @Override
+    public T get(int i){
         return items[i];
     }
-
+    /** Remove the last item from the back of list */
     @Override
-    /** Returns the number of items in the list. */
-    public int size() {
-        return size;        
+    public T removeLast(){
+        if(size == 0){
+            System.out.println("Empty AList!");
+        }
+        T z = getLast();
+        items[size-1] = null;
+        size--;
+        if(size < items.length/4){
+            resize(items.length/2);
+        }
+        return z;
     }
-
+    /** insert an item into position i in the list */
     @Override
-    /** Deletes item from back of the list and
-      * returns deleted item. */
-    public Item removeLast() {
-		Item itemToReturn = getLast();
-		/* setting to zero not strictly necessary, but
-		 * it's a good habit (we'll see why soon) */
-		items[size - 1] = null;
-		size = size - 1;
-		return itemToReturn;
+    public void insert(T item,int position){
+        if(position >= size || position < 0){
+            System.out.println("insert Error: "+ position +"is out of range!");
+            System.exit(1);
+        }
+        if(size == items.length){
+            resize(2*size);
+        }
+        System.arraycopy(items,position,items,position+1,size-position);
+        items[position] = item;
+        size++;
     }
-
-    @Override
-    /** Inserts item into given position.
-      * Code from discussion #3 */
-    public void insert(Item x, int position) {
-        Item[] newItems = (Item[]) new Object[items.length + 1];
-
-        System.arraycopy(items, 0, newItems, 0, position);
-        newItems[position] = x;
-
-        System.arraycopy(items, position, newItems, position + 1, items.length - position);
-        items = newItems;
-    }
-
-    @Override
-    /** Inserts an item at the front. */
-    public void addFirst(Item x) {
-        insert(x, 0);
-    }
-
-    @Override
-    /** Gets an item from the front. */
-    public Item getFirst() {
-        return get(0);
-    }
-
 }
