@@ -12,13 +12,17 @@ public class ArrayDeque<T> implements Deque<T>{
         nextLast = 1;
         items = (T[]) new Object[8];
     }
+    /** return mod of index */
+    private int real_index(int index){
+        return (index+items.length) % items.length;
+    }
     /** Resize the Deque */
     private void Resize(int capacity){
         T[] new_items = (T[]) new Object[capacity];
         int j = 0;
         int i = nextFirst + 1;
-        while(i % items.length != nextLast){
-            new_items[j] = items[i % items.length];
+        while(real_index(i) != nextLast){
+            new_items[j] = items[real_index(i)];
             j++;
             i++;
         }
@@ -34,7 +38,7 @@ public class ArrayDeque<T> implements Deque<T>{
             Resize(capacity);
         }
         items[nextFirst] = item;
-        nextFirst = (nextFirst-1)%(items.length);
+        nextFirst = real_index(nextFirst - 1);
         size++;
     }
     /** add an item in the end of the Deque */
@@ -45,7 +49,7 @@ public class ArrayDeque<T> implements Deque<T>{
             Resize(capacity);
         }
         items[nextLast] = item;
-        nextLast = (nextLast+1)%(items.length);
+        nextLast = real_index(nextLast+1);
         size++;
     }
     /** check whether Deque is empty */
@@ -60,12 +64,12 @@ public class ArrayDeque<T> implements Deque<T>{
     /** print the deque, separated by a space */
     @Override
     public void printDeque(){
-        int last = (nextLast-1)%items.length;
-        for(int i = nextFirst + 1;i%items.length != nextLast;i++){
-            if(i%items.length == last){
-                System.out.print(items[last]);
+        int last = real_index(nextLast-1);
+        for(int i = nextFirst + 1;real_index(i) != nextLast;i++){
+            if(real_index(i) == last){
+                System.out.print(items[real_index(i)]);
             }else {
-                System.out.print(items[i % items.length] + " ");
+                System.out.print(items[real_index(i)] + " ");
             }
         }
     }
@@ -76,8 +80,8 @@ public class ArrayDeque<T> implements Deque<T>{
             int capacity = (int)(items.length*decr_Factor) + 2;
             Resize(capacity);
         }
-        T item = items[(nextFirst+1)%items.length];
-        nextFirst = (nextFirst+1)%items.length;
+        T item = items[real_index(nextFirst+1)];
+        nextFirst = real_index(nextFirst+1);
         size--;
         return item;
 
@@ -89,8 +93,8 @@ public class ArrayDeque<T> implements Deque<T>{
             int capacity = (int)(items.length*decr_Factor) + 2;
             Resize(capacity);
         }
-        T item = items[(nextLast-1)%items.length];
-        nextLast = (nextLast-1)%items.length;
+        T item = items[real_index(nextLast-1)];
+        nextLast = real_index(nextLast-1);
         size--;
         return item;
 
@@ -101,6 +105,6 @@ public class ArrayDeque<T> implements Deque<T>{
         if(index<0 || index>=size){
             return null;
         }
-        return items[(nextFirst+1+index)%items.length];
+        return items[real_index(nextFirst+1+index)];
     }
 }
