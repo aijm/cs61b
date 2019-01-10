@@ -84,6 +84,9 @@ public class TestBSTMap {
         b.put("hi", 1);
         assertTrue(b.containsKey("hi"));
         assertTrue(b.get("hi") != null);
+        b.put("hi",2);
+        assertEquals(Integer.valueOf(2),b.get("hi"));
+        assertEquals(1,b.size());
     }
 
     @Test
@@ -100,18 +103,31 @@ public class TestBSTMap {
         b.put("b",2);
         b.put("a",1);
         b.put("c",3);
+        // remove, case 2: two children
         assertEquals(Integer.valueOf(2), b.remove("b"));
         assertNull(b.get("b"));
         assertEquals(Integer.valueOf(1),b.get("a"));
         assertEquals(Integer.valueOf(3),b.get("c"));
-
+        // remove, case 1: one child
         assertEquals(Integer.valueOf(1), b.remove("a"));
         assertNull(b.get("a"));
         assertEquals(Integer.valueOf(3),b.get("c"));
-
+        // remove, case 0: no child
         assertEquals(Integer.valueOf(3), b.remove("c"));
         assertNull(b.get("c"));
         assertEquals(0, b.size());
+
+        // remove,(key value)
+        b.put("jia",2);
+        b.put("ai",1);
+        b.put("ming",3);
+        assertNull(b.remove("ai",2));
+        assertEquals(3,b.size());
+        for(String key : b){
+            System.out.println(key);
+        }
+
+
     }
 
     @Test

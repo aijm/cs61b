@@ -1,9 +1,6 @@
 package lab9;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Set;
-import java.util.List;
+import java.util.*;
 
 /**
  * Implementation of interface Map61B with BST as core data structure.
@@ -83,6 +80,8 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
         }else if(cmp > 0){
             // put in the right
             p.right = putHelper(key, value, p.right);
+        }else{
+            p.value = value;
         }
         return p;
     }
@@ -102,11 +101,20 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
     }
 
     //////////////// EVERYTHING BELOW THIS LINE IS OPTIONAL ////////////////
-
+    private void Inorder(Node p, Set<K> keyset){
+        if(p == null){
+            return;
+        }
+        Inorder(p.left, keyset);
+        keyset.add(p.key);
+        Inorder(p.right, keyset);
+    }
     /* Returns a Set view of the keys contained in this map. */
     @Override
     public Set<K> keySet() {
-        throw new UnsupportedOperationException();
+        Set<K> keyset = new TreeSet<>();
+        Inorder(root, keyset);
+        return keyset;
     }
     /** find the largest node of the tree */
     private Node largest(Node p){
@@ -176,7 +184,7 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
                 return p;
             }
         }
-        return null; // just to avoid missing return argument error
+        return p; // just to avoid missing return argument error
     }
     /** Removes KEY from the tree if present
      *  returns VALUE removed,
@@ -190,18 +198,68 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
         return saveRemove.value;
     }
 
+    /** Helper function for remove
+     *  if tree p contains key, then remove,
+     *  and Return the new root for this tree
+     */
+    private Node removeHelper(K key, V value, Node p, Node saveRemove){
+        if(p == null){
+            saveRemove.value = null;
+            return null;
+        }
+        int cmp = key.compareTo(p.key);
+        if(cmp < 0){
+            p.left = removeHelper(key, value, p.left, saveRemove);
+        }else if(cmp > 0){
+            p.right = removeHelper(key, value, p.right, saveRemove);
+        }else if(p.value == value){
+            // found the key
+            size--;
+            // found the key, consider 3 case of remove
+            saveRemove.value = p.value;
+            if(p.left == null && p.right == null){
+                // case 0: no children
+                return null;
+            }
+            if(p.left == null && p.right != null){
+                // case 1: one children
+                return p.right;
+            }
+            if(p.left != null && p.right == null){
+                // case 1: one children
+                return p.left;
+            }
+            if(p.left !=null && p.right != null) {
+                // case 2: two children
+                /** find the parent of left largest node of the tree */
+                Node left_largest = largest(p.left);
+                // move to p as new root
+                p.key = left_largest.key;
+                p.value = left_largest.value;
+                // remove the left largest node, belongs to case 0
+                p.left = removeHelper(left_largest.key, left_largest.value, p.left, new Node(null, null));
+                // the size will -1 after remove the left largest, so we need to +1
+                size++;
+                return p;
+            }
+        }
+        return p; // just to avoid missing return argument error
+    }
     /** Removes the key-value entry for the specified key only if it is
      *  currently mapped to the specified value.  Returns the VALUE removed,
      *  null on failed removal.
      **/
     @Override
     public V remove(K key, V value) {
-        throw new UnsupportedOperationException();
+        Node saveRemove = new Node(null,null);
+        root = removeHelper(key,value,root,saveRemove);
+        return saveRemove.value;
     }
 
     @Override
     public Iterator<K> iterator() {
-        return new BSTMap_Iterator();
+//        return new BSTMap_Iterator();
+        return keySet().iterator();
     }
     /** iterator by the key less order */
     private class BSTMap_Iterator implements Iterator<K>{
