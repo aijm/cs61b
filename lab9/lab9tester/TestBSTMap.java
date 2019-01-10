@@ -13,10 +13,10 @@ public class TestBSTMap {
     @Test
     public void sanityGenericsTest() {
         try {
-            BSTMap<String, String> a = new BSTMap<String, String>();
-            BSTMap<String, Integer> b = new BSTMap<String, Integer>();
-            BSTMap<Integer, String> c = new BSTMap<Integer, String>();
-            BSTMap<Boolean, Integer> e = new BSTMap<Boolean, Integer>();
+            BSTMap<String, String> a = new BSTMap<>();
+            BSTMap<String, Integer> b = new BSTMap<>();
+            BSTMap<Integer, String> c = new BSTMap<>();
+            BSTMap<Boolean, Integer> e = new BSTMap<>();
         } catch (Exception e) {
             fail();
         }
@@ -86,6 +86,45 @@ public class TestBSTMap {
         assertTrue(b.get("hi") != null);
     }
 
+    @Test
+    public void sanityRemoveTest(){
+        BSTMap<String, Integer> b = new BSTMap<String, Integer>();
+        assertNull(b.remove("hi"));
+        b.put("hi", 1);
+        assertTrue(b.containsKey("hi"));
+        assertTrue(b.get("hi") != null);
+        assertEquals(Integer.valueOf(1), b.remove("hi"));
+        assertNull(b.remove("haha"));
+        assertEquals(0, b.size());
+
+        b.put("b",2);
+        b.put("a",1);
+        b.put("c",3);
+        assertEquals(Integer.valueOf(2), b.remove("b"));
+        assertNull(b.get("b"));
+        assertEquals(Integer.valueOf(1),b.get("a"));
+        assertEquals(Integer.valueOf(3),b.get("c"));
+
+        assertEquals(Integer.valueOf(1), b.remove("a"));
+        assertNull(b.get("a"));
+        assertEquals(Integer.valueOf(3),b.get("c"));
+
+        assertEquals(Integer.valueOf(3), b.remove("c"));
+        assertNull(b.get("c"));
+        assertEquals(0, b.size());
+    }
+
+    @Test
+    public void sanityIteratorTest(){
+        BSTMap<String, Integer> b = new BSTMap<>();
+        b.put("jia",1);
+        b.put("ai",2);
+        b.put("ming",3);
+        b.put("hello",4);
+        for(String s : b){
+            System.out.println(s);
+        }
+    }
     public static void main(String[] args) {
         jh61b.junit.TestRunner.runTests(TestBSTMap.class);
     }
