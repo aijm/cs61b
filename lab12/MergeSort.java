@@ -34,8 +34,13 @@ public class MergeSort {
     /** Returns a queue of queues that each contain one item from items. */
     private static <Item extends Comparable> Queue<Queue<Item>>
             makeSingleItemQueues(Queue<Item> items) {
-        // Your code here!
-        return null;
+        Queue<Queue<Item>> singleItemQ = new Queue<>();
+        for(Item item : items){
+            Queue<Item> q = new Queue<>();
+            q.enqueue(item);
+            singleItemQ.enqueue(q);
+        }
+        return singleItemQ;
     }
 
     /**
@@ -53,14 +58,53 @@ public class MergeSort {
      */
     private static <Item extends Comparable> Queue<Item> mergeSortedQueues(
             Queue<Item> q1, Queue<Item> q2) {
-        // Your code here!
-        return null;
+        Queue<Item> merge = new Queue<>();
+        while(!q1.isEmpty() || !q2.isEmpty()){
+            merge.enqueue(getMin(q1, q2));
+        }
+        return merge;
     }
 
     /** Returns a Queue that contains the given items sorted from least to greatest. */
     public static <Item extends Comparable> Queue<Item> mergeSort(
             Queue<Item> items) {
-        // Your code here!
+        if(items.size() <= 1) {
+            return items;
+        }
+        Queue<Queue<Item>> singleItem = makeSingleItemQueues(items);
+        Queue<Item> q1 = new Queue<>();
+        Queue<Item> q2 = new Queue<>();
+        int n = singleItem.size();
+        for(int i = 0;i < n-n/2;i++){
+            q2.enqueue(singleItem.dequeue().dequeue());
+        }
+        while(!singleItem.isEmpty()){
+            q1.enqueue(singleItem.dequeue().dequeue());
+        }
+        q1 = mergeSort(q1);
+        q2 = mergeSort(q2);
+        items = mergeSortedQueues(q1, q2);
         return items;
+    }
+
+
+    public static void TestmergeSortedQueues(){
+        Queue<String> q1 = new Queue<>();
+        Queue<String> q2 = new Queue<>();
+        q1.enqueue("ai");
+        q1.enqueue("but");
+        q1.enqueue("jia");
+        q1.enqueue("ming");
+        q2.enqueue("crazy");
+        q2.enqueue("last");
+        q2.enqueue("yes");
+        System.out.println(q1.toString());
+        System.out.println(q2.toString());
+        Queue<String> merge =  mergeSortedQueues(q1, q2);
+        System.out.println(merge.toString());
+    }
+
+    public static void main(String[] args){
+        TestmergeSortedQueues();
     }
 }
