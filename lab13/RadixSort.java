@@ -17,7 +17,32 @@ public class RadixSort {
      */
     public static String[] sort(String[] asciis) {
         // TODO: Implement LSD Sort
-        return null;
+        String[] sorted = asciis.clone();
+        int maxlen = 0;
+        for(String str : asciis){
+            if(str.length() > maxlen){
+                maxlen = str.length();
+            }
+        }
+        /** sort by character at ith least significant digit */
+        for(int i = 0;i < maxlen;i++){
+            sortHelperLSD(sorted, i);
+        }
+        return sorted;
+    }
+
+    /** get the bucket of ith least significant bit of str
+     * For example:
+     * getbucket("bc", 0) == 99+1
+     * getbucket("bc", 1) == 98+1
+     * getbucket("bc", 2) == 0
+     */
+    private static int getbucket(String str, int i){
+        if(i >= str.length()){
+            return 0;
+        }else{
+            return str.charAt(str.length() - 1 - i) + 1;
+        }
     }
 
     /**
@@ -28,7 +53,27 @@ public class RadixSort {
      */
     private static void sortHelperLSD(String[] asciis, int index) {
         // Optional LSD helper method for required LSD radix sort
-        return;
+        int[] count = new int[257]; // using count[0] for empty
+        for(String str : asciis){
+            int bucket = getbucket(str, index);
+            count[bucket]++;
+        }
+        // update count to start position
+        int count_before = count[0];
+        count[0] = 0;
+        for(int i = 1;i < count.length;i++){
+            int temp = count[i];
+            count[i] = count[i-1] + count_before;
+            count_before = temp;
+        }
+        // sorted by start position array
+        String[] asciis_copy = new String[asciis.length];
+        System.arraycopy(asciis,0,asciis_copy,0,asciis.length);
+        for(String item : asciis_copy){
+            int place = count[getbucket(item, index)];
+            asciis[place] = item;
+            count[getbucket(item, index)]++;
+        }
     }
 
     /**
